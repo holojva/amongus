@@ -1,0 +1,48 @@
+<h1>NO PIZZAS FOR YOU!</h1>
+<p>Ofc if you dont have money</p>
+<ul>
+    {% for i in order %}
+    {{i.name}}, made from 
+    {%for j in i.toppings.all%}
+    <mark>{{j.name}}</mark>,  
+    {%endfor%}
+    <br>
+    {% endfor %}
+</ul>
+<form class="form" action="" method="post">
+    {%csrf_token%}
+    {%for field in order_form%}
+    <div>
+        {{ field.label_tag }} {{ field }}
+    </div>
+    {% if field.help_text %}
+    <p class="help">{{ field.help_text|safe}}</p>
+    {%endif%}
+    {% if field.errors %}
+        {% for error in field.errors %}
+            {{ error }}
+        {% endfor %}
+    {% endif %}
+    {%endfor%}
+    <input type="submit" value="ORDER">
+</form>
+<button class="more">add more pizza</button>
+<script>
+    let pizza = document.querySelector(".pizzas")
+    let order = document.querySelector(".order")
+    let more = document.querySelector(".more")
+    let form = document.querySelector(".form")
+
+    more.addEventListener("click", (e) => {
+        e.preventDefault()
+        p = document.createElement("p")
+        l = document.createElement("label")
+        l.setAttribute("for", "id_choice")
+        l.textContent = "Choice:"
+        cloned = pizza.cloneNode(true)
+        p.append(l)
+        p.append(cloned)
+        form.insertBefore(p, order)
+
+    })
+</script>
